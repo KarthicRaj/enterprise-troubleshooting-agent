@@ -17,3 +17,4 @@ class InvestigationState(TypedDict, total=False):
     github_results: list[GitHubSearchResult]
     response: str
     agent_instructions: str
+    diagnosis: str
