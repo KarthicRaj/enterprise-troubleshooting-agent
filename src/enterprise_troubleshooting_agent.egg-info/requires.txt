@@ -1,0 +1,10 @@
+langgraph
+langchain-core
+pydantic>=2
+pydantic-settings
+httpx
+python-dotenv
+
+[dev]
+pytest
+ruff
