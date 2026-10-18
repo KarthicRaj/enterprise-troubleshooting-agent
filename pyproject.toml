@@ -14,6 +14,7 @@ dependencies = [
     "pydantic-settings",
     "httpx",
     "python-dotenv",
+    "anthropic"
 ]
 
 [project.optional-dependencies]
