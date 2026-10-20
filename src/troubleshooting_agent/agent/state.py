@@ -18,3 +18,5 @@ class InvestigationState(TypedDict, total=False):
     response: str
     agent_instructions: str
     diagnosis: str
+    splunk_results: list[dict]
+    splunk_search_error: str
