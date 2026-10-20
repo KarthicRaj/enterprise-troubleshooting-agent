@@ -16,10 +16,12 @@ class InvestigationState(TypedDict, total=False):
     scope_status: Literal["in_scope", "out_of_scope", "uncertain"]
     scope_reason: str
     search_plan: list[str]
+    github_queries: list[str]
     github_results: list[GitHubSearchResult]
     response: str
     agent_instructions: str
     diagnosis: str
     splunk_results: list[dict]
     splunk_search_error: str
+    
     
