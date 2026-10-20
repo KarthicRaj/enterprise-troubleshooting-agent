@@ -10,11 +10,11 @@ from troubleshooting_agent.agent.nodes import (
     search_github,
     search_splunk,
     triage_issue,
+    handle_uncertain_scope
 )
 
 
 def route_after_triage(state: InvestigationState) -> str:
-    """Choose whether to investigate or stop after triage."""
     status = state.get("scope_status", "uncertain")
 
     if status == "in_scope":
@@ -22,7 +22,7 @@ def route_after_triage(state: InvestigationState) -> str:
     if status == "out_of_scope":
         return "out_of_scope"
 
-    return "out_of_scope"
+    return "uncertain"
 
 
 
@@ -31,6 +31,7 @@ def build_graph():
 
     graph.add_node("triage", triage_issue)
     graph.add_node("handle_out_of_scope", handle_out_of_scope)
+    graph.add_node("handle_uncertain_scope", handle_uncertain_scope)
     graph.add_node("search_github", search_github)
     graph.add_node("search_splunk", search_splunk)
     graph.add_node("diagnose_issue", diagnose_issue)
@@ -44,7 +45,8 @@ def build_graph():
         {
             "investigate": "search_github",
             "out_of_scope": "handle_out_of_scope",
-        },
+            "uncertain": "handle_uncertain_scope",
+        }
     )
 
     graph.add_edge("handle_out_of_scope", END)
@@ -54,7 +56,6 @@ def build_graph():
     graph.add_edge("prepare_response", END)
 
     return graph.compile()
-
 
 agent = build_graph()
 
