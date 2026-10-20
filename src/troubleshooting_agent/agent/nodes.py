@@ -44,16 +44,42 @@ def redact_secrets(text: str) -> str:
 
     return text
 
+
 def triage_issue(state: InvestigationState) -> dict:
-    """Classify the issue and decide which sources to investigate."""
-    question = state["question"]
+    """Classify the issue and determine whether technical investigation is appropriate."""
+    question = state["question"].strip()
     text = question.lower()
     agent_instructions = load_agent_instructions()
+
+    # Reject clearly unrelated requests before searching any data source.
+    out_of_scope_phrases = (
+        "play a song",
+        "play music",
+        "tell me a joke",
+        "write a poem",
+        "what is the weather",
+        "what time is it",
+        "recommend a movie",
+    )
+
+    if any(phrase in text for phrase in out_of_scope_phrases):
+        return {
+            "scope_status": "out_of_scope",
+            "scope_reason": (
+                "This request is unrelated to enterprise application "
+                "troubleshooting."
+            ),
+            "issue_type": "unknown",
+            "search_plan": [],
+            "agent_instructions": agent_instructions,
+        }
+
     if any(word in text for word in ("chef", "recipe", "cookbook", "configuration")):
         issue_type = "configuration"
     elif any(word in text for word in ("confluence", "runbook", "documentation")):
         issue_type = "documentation"
-    elif any(word in text for word in ("error",
+    elif any(word in text for word in (
+        "error",
         "exception",
         "500",
         "failure",
@@ -62,22 +88,77 @@ def triage_issue(state: InvestigationState) -> dict:
         "authentication",
         "auth",
         "validation",
-        "email")):
+        "email",
+    )):
         issue_type = "application"
     else:
         issue_type = "unknown"
 
-    search_plan = [
-       "Search the approved GitHub repository for relevant source code.",
-        "Review matching code snippets and source links.",
-        "Determine whether the available evidence is sufficient to identify a likely cause.",
-    ]
+    # Treat recognizable technical requests as in scope.
+    technical_phrases = (
+        "application",
+        "service",
+        "api",
+        "endpoint",
+        "http",
+        "status code",
+        "stack trace",
+        "production",
+        "deployment",
+        "database",
+        "latency",
+        "performance",
+        "customer",
+        "request",
+        "response",
+        "configuration",
+        "confluence",
+        "runbook",
+        "documentation",
+    )
+
+    if issue_type != "unknown" or any(
+        phrase in text for phrase in technical_phrases
+    ):
+        scope_status = "in_scope"
+        scope_reason = "The request appears related to technical troubleshooting."
+    else:
+        scope_status = "uncertain"
+        scope_reason = (
+            "The request does not clearly describe an enterprise "
+            "technical issue."
+        )
+
+    search_plan = (
+        [
+            "Search the approved GitHub repository for relevant source code.",
+            "Review matching code snippets and source links.",
+            "Determine whether the available evidence supports a likely cause.",
+        ]
+        if scope_status == "in_scope"
+        else []
+    )
 
     return {
+        "scope_status": scope_status,
+        "scope_reason": scope_reason,
         "issue_type": issue_type,
         "search_plan": search_plan,
-        "agent_instructions": agent_instructions
-    }      
+        "agent_instructions": agent_instructions,
+    }
+
+
+def handle_out_of_scope(state: InvestigationState) -> dict:
+    """Return a short response without running technical searches."""
+    reason = state.get("scope_reason", "The request is outside the agent's scope.")
+
+    return {
+        "response": (
+            "I can help investigate enterprise application issues, "
+            "including errors, configuration, source code, and runtime logs. "
+            f"I won't run a technical investigation for this request. {reason}"
+        )
+    }
 
 
 

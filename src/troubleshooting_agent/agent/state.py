@@ -13,6 +13,8 @@ class GitHubSearchResult(TypedDict):
 class InvestigationState(TypedDict, total=False):
     question: str
     issue_type: Literal["application", "configuration", "documentation", "unknown"]
+    scope_status: Literal["in_scope", "out_of_scope", "uncertain"]
+    scope_reason: str
     search_plan: list[str]
     github_results: list[GitHubSearchResult]
     response: str
@@ -20,3 +22,4 @@ class InvestigationState(TypedDict, total=False):
     diagnosis: str
     splunk_results: list[dict]
     splunk_search_error: str
+    
