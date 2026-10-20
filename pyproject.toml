@@ -7,6 +7,7 @@ name = "enterprise-troubleshooting-agent"
 version = "0.1.0"
 description = "Enterprise application troubleshooting agent"
 requires-python = ">=3.12"
+
 dependencies = [
     "langgraph",
     "langchain-core",
@@ -14,8 +15,12 @@ dependencies = [
     "pydantic-settings",
     "httpx",
     "python-dotenv",
-    "anthropic"
+    "anthropic",
+    "streamlit>=1.66,<2",
+    "markdown",
+    "bleach",
 ]
+
 
 [project.optional-dependencies]
 dev = [

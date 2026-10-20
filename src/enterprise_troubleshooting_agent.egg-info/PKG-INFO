@@ -9,6 +9,10 @@ Requires-Dist: pydantic>=2
 Requires-Dist: pydantic-settings
 Requires-Dist: httpx
 Requires-Dist: python-dotenv
+Requires-Dist: anthropic
+Requires-Dist: streamlit<2,>=1.66
+Requires-Dist: markdown
+Requires-Dist: bleach
 Provides-Extra: dev
 Requires-Dist: pytest; extra == "dev"
 Requires-Dist: ruff; extra == "dev"

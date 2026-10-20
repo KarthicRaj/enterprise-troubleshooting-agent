@@ -23,11 +23,14 @@ src/troubleshooting_agent/connectors/confluence/client.py
 src/troubleshooting_agent/connectors/confluence/models.py
 src/troubleshooting_agent/connectors/confluence/pages.py
 src/troubleshooting_agent/connectors/confluence/search.py
+src/troubleshooting_agent/connectors/github/__init__.py
 src/troubleshooting_agent/connectors/github/client.py
 src/troubleshooting_agent/connectors/github/models.py
 src/troubleshooting_agent/connectors/github/repository.py
 src/troubleshooting_agent/connectors/github/search.py
 src/troubleshooting_agent/connectors/observability/client.py
+src/troubleshooting_agent/connectors/splunk/client.py
+src/troubleshooting_agent/connectors/splunk/normalization.py
 src/troubleshooting_agent/evaluation/answer_metrics.py
 src/troubleshooting_agent/evaluation/datasets.py
 src/troubleshooting_agent/evaluation/retrieval_metrics.py
@@ -41,6 +44,8 @@ src/troubleshooting_agent/knowledge/dependency_map.py
 src/troubleshooting_agent/knowledge/document.py
 src/troubleshooting_agent/knowledge/repository_catalog.py
 src/troubleshooting_agent/knowledge/service_catalog.py
+src/troubleshooting_agent/llm/__init__.py
+src/troubleshooting_agent/llm/anthropic_client.py
 src/troubleshooting_agent/observabiltiy/logging.py
 src/troubleshooting_agent/observabiltiy/metrics.py
 src/troubleshooting_agent/observabiltiy/tracing.py

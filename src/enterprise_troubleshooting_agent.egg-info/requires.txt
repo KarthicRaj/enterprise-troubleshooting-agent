@@ -4,6 +4,10 @@ pydantic>=2
 pydantic-settings
 httpx
 python-dotenv
+anthropic
+streamlit<2,>=1.66
+markdown
+bleach
 
 [dev]
 pytest
